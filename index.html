@@ -78,6 +78,39 @@ body{font-family:"DM Sans",sans-serif;background:radial-gradient(ellipse at 50% 
 
 #remoteAudio{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-10px;bottom:-10px}.chat-modal{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;padding:18px;background:#05040bcc;backdrop-filter:blur(12px)}.chat-modal.open{display:flex;animation:modalFade .18s ease}.chat-window{width:min(420px,100%);height:min(560px,80vh);display:flex;flex-direction:column;padding:17px;border:1px solid #ffffff20;border-radius:24px;background:linear-gradient(145deg,#201a2d,#100f18);box-shadow:0 30px 100px #0009}.chat-window .chat-log{flex:1;height:auto;min-height:0;margin-bottom:12px}.chat-window .chat-head{flex:none}.modal-close{width:32px;height:32px;border-radius:10px;border:1px solid #ffffff17;background:#ffffff0a;color:#eee;font-size:24px;line-height:1}.reaction-wrap{position:relative}.reaction-menu{display:none;position:absolute;z-index:40;bottom:70px;left:50%;transform:translateX(-50%);width:210px;padding:9px;grid-template-columns:repeat(4,1fr);gap:5px;border:1px solid #ffffff1c;border-radius:17px;background:#171521f7;box-shadow:0 20px 60px #0009;backdrop-filter:blur(18px)}.reaction-menu.open{display:grid;animation:pop .18s ease-out}.reaction-menu button{height:40px;border:1px solid #ffffff0c;border-radius:11px;background:#ffffff07;font-size:21px}.reaction-menu button:hover{background:#a78bfa25;transform:scale(1.08)}.reaction-layer{position:fixed;inset:0;z-index:1100;overflow:hidden;pointer-events:none}.reaction-float{position:absolute;bottom:-70px;font-size:clamp(28px,4vw,48px);filter:drop-shadow(0 5px 14px #0007);animation:floatEmoji 3.1s cubic-bezier(.15,.65,.3,1) forwards}.reaction-float.remote{animation-duration:3.5s}@keyframes floatEmoji{0%{transform:translateY(0) rotate(0) scale(.55);opacity:0}12%{opacity:1;transform:translateY(-12vh) rotate(-10deg) scale(1.15)}75%{opacity:1}100%{transform:translateY(-115vh) rotate(24deg) scale(.8);opacity:0}}@keyframes modalFade{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
 
+
+/* Final polish: immersive call layout and keyboard-safe compact chat */
+html,body{width:100%;height:100%;min-height:100%;overscroll-behavior:none}
+body.call-active{height:100dvh;min-height:100dvh;overflow:hidden;touch-action:pan-x pan-y}
+body.call-active .shell{width:100%;max-width:none;height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column;padding:max(9px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));gap:8px}
+body.call-active .nav{flex:0 0 auto;min-height:38px;margin-bottom:0}
+body.call-active .brand-mark{width:34px;height:34px;border-radius:11px}
+body.call-active .brand-name{font-size:20px}
+body.call-active .hero,body.call-active #entry,body.call-active .foot{display:none!important}
+body.call-active #call{display:flex!important;flex:1 1 auto;min-height:0;height:auto;max-height:none;max-width:none;width:100%;margin:0;padding:10px;border-radius:22px;overflow:hidden;flex-direction:column;gap:8px}
+body.call-active .call-head{flex:0 0 auto;margin:0;gap:8px;flex-wrap:nowrap}
+body.call-active .room-code{font-size:15px;letter-spacing:.4px;padding:7px 10px}
+body.call-active .timer{padding:7px 9px;font-size:10px}
+body.call-active .videos{flex:1 1 auto;min-height:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+body.call-active .video-box{min-height:0;height:100%;aspect-ratio:auto;border-radius:17px}
+body.call-active .call-tools,body.call-active .controls{flex:0 0 auto;margin:0;gap:9px;justify-content:center;flex-wrap:nowrap}
+body.call-active .control{flex:0 0 46px;width:46px;height:46px;min-height:46px;border-radius:14px}
+body.call-active .call-note{flex:0 0 auto;margin:0;font-size:9px;line-height:1.3;max-height:2.6em;overflow:hidden}
+body.call-active .chat-modal{align-items:flex-end;justify-content:center;padding:0 10px max(10px,env(safe-area-inset-bottom));inset:0 0 auto;height:var(--visual-height,100dvh);background:#05040b88}
+body.call-active .chat-window{width:min(460px,100%);height:min(255px,42%);min-height:190px;padding:10px 12px;border-radius:20px;gap:6px}
+body.call-active .chat-window .chat-head{min-height:32px;margin:0;flex:0 0 auto}
+body.call-active .chat-window .chat-head strong{font-size:12px}
+body.call-active .chat-window .modal-close{flex:0 0 32px;width:32px;height:32px}
+body.call-active .chat-window .chat-log{min-height:0;margin:0;padding:2px;gap:5px}
+body.call-active .chat-window .chat-bubble{padding:6px 9px;font-size:11px}
+body.call-active .chat-window .chat-compose{flex:0 0 auto;gap:6px}
+body.call-active .chat-window .chat-compose .field{padding:10px 12px;min-height:40px}
+body.call-active .chat-window .chat-send{height:40px;min-height:40px;width:42px}
+.reaction-float{will-change:transform,opacity;backface-visibility:hidden;transform:translate3d(0,0,0);animation-timing-function:linear!important}
+@keyframes floatEmoji{0%{transform:translate3d(0,0,0) rotate(0) scale(.72);opacity:0}8%{opacity:1}25%{transform:translate3d(8px,-28vh,0) rotate(7deg) scale(1.05);opacity:1}50%{transform:translate3d(-8px,-56vh,0) rotate(-7deg) scale(1.08);opacity:1}75%{transform:translate3d(7px,-84vh,0) rotate(8deg) scale(1);opacity:.95}100%{transform:translate3d(-4px,-120vh,0) rotate(-5deg) scale(.9);opacity:0}}
+@media(max-width:650px){body.call-active .shell{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));gap:6px}body.call-active #call{padding:8px;gap:7px}body.call-active .brand-name{font-size:18px}body.call-active .brand-mark{width:31px;height:31px}body.call-active .control{flex-basis:42px;width:42px;height:42px;min-height:42px;border-radius:13px}body.call-active .call-tools,body.call-active .controls{gap:7px}body.call-active .video-label{font-size:9px;padding:5px 7px;left:6px;bottom:6px}body.call-active .room-code{font-size:13px;padding:6px 8px}body.call-active .timer{font-size:9px;padding:6px 7px}body.call-active .call-head-actions .icon-only{width:34px;height:34px}}
+@media(max-height:560px){body.call-active .videos{min-height:0}body.call-active .control{flex-basis:38px;width:38px;height:38px;min-height:38px}body.call-active .call-note{display:none}body.call-active .chat-window{height:min(220px,55%);min-height:160px}}
+
 </style>
 </head>
 <body>
@@ -214,6 +247,7 @@ async function startRoom(createNew) {
     $("camBtn").style.display = callMode === "video" ? "flex" : "none";
     $("shownCode").textContent = roomCode;
     $("localLabel").textContent = ($("nickname").value.trim() || "You").slice(0,28);
+    document.body.classList.add("call-active");
     $("entry").style.display = "none";
     $("call").style.display = "block";
     callStartedAt = Date.now();
@@ -280,7 +314,7 @@ async function startRoom(createNew) {
     console.error(err);
     let message = err && err.name === "NotAllowedError" ? "Microphone or camera permission was denied. Check your browser permissions." : (err.message || "An unexpected error occurred.");
     setStatus(message, "error");
-    if ($("call").style.display === "block") { $("call").style.display = "none"; $("entry").style.display = "block"; }
+    if ($("call").style.display === "block") { document.body.classList.remove("call-active"); $("call").style.display = "none"; $("entry").style.display = "block"; }
     await cleanup(false);
   }
 }
@@ -504,10 +538,19 @@ async function cleanup(sendBye=true) {
 }
 async function leaveCall() {
   await cleanup(true);
+  document.body.classList.remove("call-active");
   $("call").style.display = "none"; $("entry").style.display = "block";
   setStatus("Call ended. Create a new room or join with a code.");
 }
 $("hangBtn").addEventListener("click", leaveCall);
+
+function updateVisualViewport(){
+  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty("--visual-height", `${Math.max(180,h)}px`);
+}
+updateVisualViewport();
+window.addEventListener("resize", updateVisualViewport, {passive:true});
+if(window.visualViewport){window.visualViewport.addEventListener("resize", updateVisualViewport, {passive:true});window.visualViewport.addEventListener("scroll", updateVisualViewport, {passive:true});}
 
 window.addEventListener("beforeunload", () => {
   if (channel) { try { channel.send({type:"broadcast",event:"signal",payload:{type:"bye",from:peerId,room:roomCode,target:remotePeerId}}); } catch(err){} }
