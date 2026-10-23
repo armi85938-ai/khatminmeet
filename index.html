@@ -75,6 +75,9 @@ body{font-family:"DM Sans",sans-serif;background:radial-gradient(ellipse at 50% 
 .voice-wrap{position:relative}.voice-menu{display:none;position:absolute;z-index:20;bottom:68px;left:50%;transform:translateX(-50%);width:220px;padding:13px;border:1px solid #ffffff1c;border-radius:20px;background:#171521f7;box-shadow:0 20px 60px #0008;backdrop-filter:blur(20px)}.voice-menu.open{display:block;animation:pop .18s ease-out}.voice-menu h3{font-size:11px;margin:0 0 10px;color:#d8ccff;text-align:center}.voice-option{width:100%;border:1px solid #ffffff12;background:#ffffff05;color:#f5f3ff;border-radius:12px;padding:10px;margin:4px 0;text-align:left;font-size:11px}.voice-option.active{border-color:#a78bfa;background:#a78bfa19}.chat-panel{margin-top:18px;border:1px solid #ffffff12;border-radius:22px;background:#100f17;padding:15px}.chat-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.chat-head strong{font-size:13px}.chat-log{height:150px;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:4px 2px 10px}.chat-bubble{max-width:85%;align-self:flex-start;background:#242034;border:1px solid #ffffff0b;border-radius:14px 14px 14px 4px;padding:9px 11px;font-size:12px;line-height:1.5;overflow-wrap:anywhere}.chat-bubble.mine{align-self:flex-end;background:#392b58;border-radius:14px 14px 4px 14px}.chat-time{display:block;font-size:8px;color:#aaa1c3;margin-top:4px}.chat-compose{display:flex;gap:8px}.chat-compose input{flex:1;min-width:0}.chat-send{width:46px;flex:none;padding:0}
 .timer{font-family:"DM Sans",sans-serif;font-variant-numeric:tabular-nums;color:#c7b6ff;background:#a78bfa0b;border:1px solid #a78bfa22;border-radius:999px;padding:9px 12px;font-size:12px;letter-spacing:1px}
 @keyframes pop{from{opacity:0;transform:translate(-50%,8px) scale(.96)}to{opacity:1;transform:translate(-50%,0) scale(1)}}@media(max-width:650px){.shell{padding:18px 13px 25px}.hero{padding:30px 0 22px}.main-grid>.panel{padding:22px 18px}.videos{grid-template-columns:1fr}.video-box{aspect-ratio:16/10;min-height:200px}.call-head{align-items:center}.room-code{font-size:16px;letter-spacing:.4px;padding:9px 10px}.timer{font-size:11px}.call-head-actions{gap:6px}.icon-only{width:40px;height:40px}.controls{gap:9px}.control{width:51px;height:51px;min-height:51px}.voice-menu{left:auto;right:-65px;transform:none}.voice-menu.open{animation:none}}
+
+#remoteAudio{position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;left:-10px;bottom:-10px}.chat-modal{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;padding:18px;background:#05040bcc;backdrop-filter:blur(12px)}.chat-modal.open{display:flex;animation:modalFade .18s ease}.chat-window{width:min(420px,100%);height:min(560px,80vh);display:flex;flex-direction:column;padding:17px;border:1px solid #ffffff20;border-radius:24px;background:linear-gradient(145deg,#201a2d,#100f18);box-shadow:0 30px 100px #0009}.chat-window .chat-log{flex:1;height:auto;min-height:0;margin-bottom:12px}.chat-window .chat-head{flex:none}.modal-close{width:32px;height:32px;border-radius:10px;border:1px solid #ffffff17;background:#ffffff0a;color:#eee;font-size:24px;line-height:1}.reaction-wrap{position:relative}.reaction-menu{display:none;position:absolute;z-index:40;bottom:70px;left:50%;transform:translateX(-50%);width:210px;padding:9px;grid-template-columns:repeat(4,1fr);gap:5px;border:1px solid #ffffff1c;border-radius:17px;background:#171521f7;box-shadow:0 20px 60px #0009;backdrop-filter:blur(18px)}.reaction-menu.open{display:grid;animation:pop .18s ease-out}.reaction-menu button{height:40px;border:1px solid #ffffff0c;border-radius:11px;background:#ffffff07;font-size:21px}.reaction-menu button:hover{background:#a78bfa25;transform:scale(1.08)}.reaction-layer{position:fixed;inset:0;z-index:900;overflow:hidden;pointer-events:none}.reaction-float{position:absolute;bottom:-70px;font-size:clamp(28px,4vw,48px);filter:drop-shadow(0 5px 14px #0007);animation:floatEmoji 3.1s cubic-bezier(.15,.65,.3,1) forwards}.reaction-float.remote{animation-duration:3.5s}@keyframes floatEmoji{0%{transform:translateY(0) rotate(0) scale(.55);opacity:0}12%{opacity:1;transform:translateY(-12vh) rotate(-10deg) scale(1.15)}75%{opacity:1}100%{transform:translateY(-115vh) rotate(24deg) scale(.8);opacity:0}}@keyframes modalFade{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+
 </style>
 </head>
 <body>
@@ -125,6 +128,7 @@ body{font-family:"DM Sans",sans-serif;background:radial-gradient(ellipse at 50% 
       <div class="room-meta"><div class="room-code" id="shownCode">khatmin001</div></div>
       <div class="timer" id="callTimer">00:00:00</div><div class="call-head-actions"><button class="btn btn-quiet icon-only" id="copyBtn" type="button" aria-label="Copy room code" title="Copy room code"><svg viewBox="0 0 24 24" fill="none"><rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" stroke="currentColor" stroke-width="1.7"/></svg></button></div>
     </div>
+    <audio id="remoteAudio" autoplay playsinline></audio>
     <div class="videos">
       <div class="video-box"><video id="localVideo" autoplay playsinline muted></video><div class="video-placeholder" id="localPlaceholder"><div class="big-avatar">✦</div><span></span></div><div class="video-label" id="localLabel">You</div></div>
       <div class="video-box"><video id="remoteVideo" autoplay playsinline></video><div class="video-placeholder" id="remotePlaceholder"><div class="big-avatar">◌</div><span id="remoteWaiting">Waiting for guest…</span></div><div class="video-label" id="remoteLabel">Guest</div></div>
@@ -133,10 +137,13 @@ body{font-family:"DM Sans",sans-serif;background:radial-gradient(ellipse at 50% 
       <button class="control" id="micBtn" type="button" aria-label="Toggle microphone"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="12" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Mic</span></button>
       <button class="control" id="camBtn" type="button" aria-label="Toggle camera"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="13" height="12" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="m16 10 5-3v10l-5-3" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><span>Camera</span></button>
       <button class="control hang" id="hangBtn" type="button" aria-label="End call"><svg viewBox="0 0 24 24" fill="none"><path d="M4 15.5c4.8-4.2 11.2-4.2 16 0l-2.4 3a1.5 1.5 0 0 1-1.8.4l-2.2-1.1a3.7 3.7 0 0 0-3.2 0l-2.2 1.1a1.5 1.5 0 0 1-1.8-.4L4 15.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><span>End call</span></button>
-      <div class="voice-wrap"><button class="control voice" id="voiceBtn" type="button" aria-label="Voice effects" title="Voice effects"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/></svg></button><div class="voice-menu" id="voiceMenu"><h3>LIVE VOICE FX</h3><button class="voice-option active" data-voice="normal">◉ Original voice</button><button class="voice-option" data-voice="woman">✧ Feminine tone</button><button class="voice-option" data-voice="man">◈ Masculine tone</button><button class="voice-option" data-voice="child">☼ Bright / childlike</button><button class="voice-option" data-voice="robot">▦ Robot filter</button></div></div>
+      <div class="voice-wrap"><button class="control voice" id="voiceBtn" type="button" aria-label="Voice effects" title="Voice effects"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10v4m4-8v12m4-15v18m4-13v8m4-11v14m3-10v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="voice-menu" id="voiceMenu"><h3>LIVE VOICE FX</h3><button class="voice-option active" data-voice="normal">◉ Original voice</button><button class="voice-option" data-voice="woman">✧ Feminine tone</button><button class="voice-option" data-voice="man">◈ Masculine tone</button><button class="voice-option" data-voice="child">☼ Bright / childlike</button><button class="voice-option" data-voice="robot">▦ Robot filter</button></div></div>
+      <button class="control" id="messageBtn" type="button" aria-label="Open messages" title="Messages"><svg viewBox="0 0 24 24" fill="none"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2 1-5A7.5 7.5 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 11h8M8 14h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+      <div class="reaction-wrap"><button class="control" id="reactionBtn" type="button" aria-label="Send reaction" title="Reactions"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M8 14s1.3 2.2 4 2.2 4-2.2 4-2.2M8.5 9.5h.01M15.5 9.5h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button><div class="reaction-menu" id="reactionMenu"><button type="button" data-emoji="❤️">❤️</button><button type="button" data-emoji="😂">😂</button><button type="button" data-emoji="😍">😍</button><button type="button" data-emoji="👏">👏</button><button type="button" data-emoji="🔥">🔥</button><button type="button" data-emoji="🎉">🎉</button><button type="button" data-emoji="👍">👍</button><button type="button" data-emoji="🥹">🥹</button></div></div>
     </div>
     <div class="call-note" id="callNote">Preparing your call…</div>
-    <section class="chat-panel"><div class="chat-head"><strong>Messages</strong><span style="color:#8f83b2;font-size:10px">IN-CALL CHAT</span></div><div class="chat-log" id="chatLog" aria-live="polite"><div class="chat-bubble">Your messages will appear here.</div></div><form class="chat-compose" id="chatForm"><input class="field" id="chatInput" maxlength="500" placeholder="Write a message…" autocomplete="off"><button class="btn btn-primary chat-send" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none"><path d="m4 4 16 8-16 8 3-8-3-8Zm3 8h13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form></section>
+    <div class="chat-modal" id="chatModal" aria-hidden="true"><div class="chat-window"><div class="chat-head"><strong>Messages</strong><button class="modal-close" id="closeChatBtn" type="button" aria-label="Close messages">×</button></div><div class="chat-log" id="chatLog" aria-live="polite"><div class="chat-bubble">Your messages will appear here.</div></div><form class="chat-compose" id="chatForm"><input class="field" id="chatInput" maxlength="500" placeholder="Write a message…" autocomplete="off"><button class="btn btn-primary chat-send" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none"><path d="m4 4 16 8-16 8 3-8-3-8Zm3 8h13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button></form></div></div>
+    <div class="reaction-layer" id="reactionLayer" aria-hidden="true"></div>
   </section>
   <footer class="foot"><span id="year"></span> · <b>khatmin meet</b></footer>
 </div>
@@ -197,7 +204,7 @@ async function startRoom(createNew) {
       video: callMode === "video" ? { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 24, max: 30 } } : false
     };
     localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-    setupVoiceProcessor();
+    await setupVoiceProcessor();
     $("localVideo").srcObject = localStream;
     $("localVideo").muted = true;
     $("localPlaceholder").style.display = callMode === "video" ? "none" : "flex";
@@ -214,11 +221,14 @@ async function startRoom(createNew) {
     $("chatLog").innerHTML = "";
     setCallNote("Room ready. Share the code with your guest.");
     pc = new RTCPeerConnection(rtcConfig);
-    localStream.getTracks().forEach(track => { if(track.kind === "audio" && window._khatminProcessedAudioTrack) pc.addTrack(window._khatminProcessedAudioTrack, new MediaStream([window._khatminProcessedAudioTrack])); else pc.addTrack(track, localStream); });
+    localStream.getTracks().forEach(track => { if(track.kind === "audio" && window._khatminProcessedAudioTrack && window._khatminProcessedAudioTrack.readyState === "live") pc.addTrack(window._khatminProcessedAudioTrack, new MediaStream([window._khatminProcessedAudioTrack])); else pc.addTrack(track, localStream); });
     pc.ontrack = event => {
-      const stream = event.streams && event.streams[0];
+      const stream = (event.streams && event.streams[0]) || new MediaStream([event.track]);
       if (stream) {
         $("remoteVideo").srcObject = stream;
+        $("remoteVideo").muted = true;
+        $("remoteAudio").srcObject = stream;
+        $("remoteAudio").play().catch(() => setCallNote("Tap once on the page if your browser blocks audio playback."));
         if (callMode === "video") $("remotePlaceholder").style.display = "none";
         $("remoteVideo").play().catch(() => {});
       }
@@ -312,8 +322,10 @@ async function handleSignal(payload) {
   }
   if (payload.type === "chat") {
     addChatMessage(payload.text, false, payload.name || "Guest", payload.time || Date.now());
+    $("chatModal").classList.add("open"); $("chatModal").setAttribute("aria-hidden","false");
     return;
   }
+  if (payload.type === "reaction") { burstReaction(payload.emoji, true); return; }
   if (payload.type === "bye") {
     $("remoteVideo").srcObject = null;
     $("remotePlaceholder").style.display = "flex";
@@ -372,6 +384,26 @@ $("camBtn").addEventListener("click", () => {
   $("camBtn").classList.toggle("off", !track.enabled);
   $("camBtn").querySelector("span").textContent = track.enabled ? "Camera" : "Camera off";
 });
+function burstReaction(emoji, remote=false) {
+  const layer = $("reactionLayer");
+  const count = 7;
+  for (let i=0;i<count;i++) {
+    const el=document.createElement("span"); el.className="reaction-float"+(remote?" remote":""); el.textContent=emoji;
+    el.style.left=(8+Math.random()*84)+"%";
+    el.style.animationDelay=(Math.random()*.48)+"s";
+    el.style.fontSize=(28+Math.random()*24)+"px";
+    layer.appendChild(el); setTimeout(()=>el.remove(),3900);
+  }
+}
+$("messageBtn").addEventListener("click",()=>{ $("chatModal").classList.add("open"); $("chatModal").setAttribute("aria-hidden","false"); setTimeout(()=>$ ("chatInput").focus(),80); });
+$("closeChatBtn").addEventListener("click",()=>{ $("chatModal").classList.remove("open"); $("chatModal").setAttribute("aria-hidden","true"); });
+$("chatModal").addEventListener("click",e=>{if(e.target===$("chatModal")){ $("chatModal").classList.remove("open"); $("chatModal").setAttribute("aria-hidden","true"); }});
+$("reactionBtn").addEventListener("click",()=>$("reactionMenu").classList.toggle("open"));
+document.querySelectorAll(".reaction-menu [data-emoji]").forEach(btn=>btn.addEventListener("click",async()=>{
+  const emoji=btn.dataset.emoji; burstReaction(emoji,false); $("reactionMenu").classList.remove("open");
+  if(channel && remotePeerId){try{await sendSignal({type:"reaction",emoji,target:remotePeerId});}catch(err){console.warn("Reaction could not be sent",err);}}
+}));
+
 function addChatMessage(message, mine, name, time) {
   const bubble = document.createElement("div"); bubble.className = "chat-bubble" + (mine ? " mine" : "");
   bubble.textContent = message;
@@ -380,11 +412,11 @@ function addChatMessage(message, mine, name, time) {
 }
 $("chatForm").addEventListener("submit", async e => {
   e.preventDefault(); const text = $("chatInput").value.trim(); if (!text || !channel) return;
-  const now = Date.now(); addChatMessage(text, true, $("nickname").value.trim() || "You", now); $("chatInput").value = "";
+  const now = Date.now(); addChatMessage(text, true, $("nickname").value.trim() || "You", now); $("chatInput").value = ""; $("chatModal").classList.add("open"); $("chatModal").setAttribute("aria-hidden","false");
   try { await sendSignal({type:"chat", text, name:($("nickname").value.trim() || "Guest").slice(0,28), time:now, target:remotePeerId}); }
   catch(err) { setCallNote("Message could not be sent. Check the connection."); }
 });
-function setupVoiceProcessor() {
+async function setupVoiceProcessor() {
   try {
     if (!localStream || !localStream.getAudioTracks().length) return;
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -392,14 +424,13 @@ function setupVoiceProcessor() {
     const low = audioContext.createBiquadFilter(); low.type="lowshelf"; low.frequency.value=180;
     const high = audioContext.createBiquadFilter(); high.type="highshelf"; high.frequency.value=2800;
     const peaking = audioContext.createBiquadFilter(); peaking.type="peaking"; peaking.frequency.value=1200; peaking.Q.value=0.8;
-    voiceDistortion = audioContext.createWaveShaper(); voiceDistortion.curve = null; voiceDistortion.oversample="4x";
+    voiceDistortion = audioContext.createWaveShaper(); voiceDistortion.curve = makeDistortionCurve(0.01); voiceDistortion.oversample="4x";
     voiceSource.connect(low); low.connect(peaking); peaking.connect(high); high.connect(voiceDistortion);
     window._khatminVoiceNodes = {low,high,peak:peaking,distortion:voiceDistortion};
     processedStream = audioContext.createMediaStreamDestination(); voiceDistortion.connect(processedStream);
-    const processedTrack = processedStream.stream.getAudioTracks()[0];
-    // Use the processed microphone track for WebRTC while retaining the original stream for device controls.
-    window._khatminProcessedAudioTrack = processedTrack;
-    audioContext.resume().catch(()=>{});
+    await audioContext.resume();
+    if (audioContext.state === "running") window._khatminProcessedAudioTrack = processedStream.stream.getAudioTracks()[0];
+    else window._khatminProcessedAudioTrack = null;
   } catch(err) { console.warn("Voice effects are unavailable:", err); }
 }
 function setVoiceEffect(mode) {
@@ -433,7 +464,8 @@ async function cleanup(sendBye=true) {
   pc = null;
   if (localStream) localStream.getTracks().forEach(track => track.stop());
   localStream = null;
-  $("localVideo").srcObject = null; $("remoteVideo").srcObject = null;
+  $("localVideo").srcObject = null; $("remoteVideo").srcObject = null; $("remoteAudio").srcObject = null;
+  $("chatModal").classList.remove("open"); $("chatModal").setAttribute("aria-hidden","true"); $("reactionMenu").classList.remove("open");
   $("localPlaceholder").style.display = "flex"; $("remotePlaceholder").style.display = "flex";
   $("remoteWaiting").textContent = "Waiting for guest…";
   $("micBtn").classList.remove("off"); $("camBtn").classList.remove("off");
