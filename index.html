@@ -255,9 +255,14 @@ async function startRoom(createNew) {
     await new Promise((resolve, reject) => {
       let settled = false;
       const timeout = setTimeout(() => { if (!settled) { settled = true; reject(new Error("اتصال به Supabase زمان‌بر شد. اینترنت و تنظیمات پروژه را بررسی کن.")); } }, 16000);
-      channel.subscribe(state => {
+      channel.subscribe((state, err) => {
         if (state === "SUBSCRIBED" && !settled) { settled = true; clearTimeout(timeout); resolve(); }
-        else if (["CHANNEL_ERROR","TIMED_OUT","CLOSED"].includes(state) && !settled) { settled = true; clearTimeout(timeout); reject(new Error("اتصال Realtime برقرار نشد. کلید عمومی و دسترسی Realtime پروژه را بررسی کن.")); }
+        else if (["CHANNEL_ERROR","TIMED_OUT","CLOSED"].includes(state) && !settled) {
+          settled = true; clearTimeout(timeout);
+          const detail = err && (err.message || err.reason || String(err));
+          console.error("Supabase Realtime subscription failed:", state, err || "no error detail");
+          reject(new Error("Realtime: " + state + (detail ? " — " + detail : "") + " | آدرس و کلید پروژه یا اتصال WebSocket را بررسی کن."));
+        }
       });
     });
     await sendSignal({ type: "join", name: ($("nickname").value.trim() || (createNew ? "میزبان" : "مهمان")).slice(0,28) });
